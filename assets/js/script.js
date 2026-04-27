@@ -51,7 +51,8 @@ const SEAT_ROWS = 'ABCDEFGHIJKLMNO'.split('');
 const SEAT_COLS = Array.from({ length: 12 }, (_, i) => i + 1);
 const SEAT_BOOKED = new Set([]); // todos os assentos agora estão desbloqueados
 const PREFERENTIAL_ROW = 'H';
-let selectedSeat = '';
+let selectedSeats = []; // array of seat codes
+let seatTypes = {}; // code -> 'inteira'|'meia-estudante'|'meia-60'
 
 /* ── MASKS ── */
 function maskCPF(el) {
@@ -343,24 +344,23 @@ function updateCart() {
 }
 
 /* ── FORM HELPERS ── */
-function toggleStudent() {
-  document.getElementById('student-box').style.display = document.getElementById('b-student').checked ? 'block' : 'none';
-}
+
+
 function onFilmChange() {
   document.getElementById('price-preview').style.display = 'flex';
   refreshEstimate();
 }
 function calcPrice() {
+  if (!selectedSeats.length) return 0;
   const pr = isPromo();
-  const isStu = document.getElementById('b-student').checked;
-  const cpf = document.getElementById('b-cpf').value;
-  const category = document.getElementById('b-category').value;
-  const extra = category === 'vip' ? 10 : category === 'imax' ? 18 : 0;
-  let base = 28;
-  if (pr) base = 12;
-  else if (isStu) base = 14;
-  else if (validCPF(cpf) && ageFromCPF(cpf) >= 60) base = 14;
-  return base + extra;
+  const cat = document.getElementById('b-category').value;
+  const extra = cat === 'vip' ? 10 : cat === 'imax' ? 18 : 0;
+  const baseInteira = pr ? 12 : 28;
+  const baseMeia = pr ? 6 : 14;
+  return selectedSeats.reduce((sum, s) => {
+    const t = seatTypes[s] || 'inteira';
+    return sum + (t === 'inteira' ? baseInteira : baseMeia) + extra;
+  }, 0);
 }
 function refreshEstimate() {
   if (!document.getElementById('b-film').value) return;
@@ -372,116 +372,154 @@ function refreshEstimate() {
 function validateTicketForm() {
   const filmId = parseInt(document.getElementById('b-film').value);
   const sess = document.getElementById('b-session').value;
-  const seat = document.getElementById('b-seat').value;
-  const category = document.getElementById('b-category').value;
   const nm = document.getElementById('b-name').value.trim();
   const cpf = document.getElementById('b-cpf').value;
   const em = document.getElementById('b-email').value.trim();
-  const isStu = document.getElementById('b-student').checked;
-  const sid = document.getElementById('b-sid')?.value || '';
   if (!filmId) return ['warn', 'Selecione um filme', 'Escolha o filme desejado.'];
   if (!sess) return ['warn', 'Selecione um horário', 'Escolha o horário da sessão.'];
-  if (!seat) return ['warn', 'Selecione uma poltrona', 'Escolha sua poltrona na janela de seleção.'];
+  if (!selectedSeats.length) return ['warn', 'Selecione as poltronas', 'Escolha ao menos uma poltrona no mapa de assentos.'];
   if (!nm) return ['warn', 'Nome obrigatório', 'Informe seu nome completo.'];
   if (!em || !em.includes('@')) return ['warn', 'Email inválido', 'Informe um email válido.'];
   if (!validCPF(cpf)) return ['err', 'CPF inválido', 'O CPF informado não é válido. Verifique os dígitos e tente novamente.'];
   const f = FILMS.find(x => x.id === filmId);
   const age = ageFromCPF(cpf);
   if (f.minAge > 0 && age < f.minAge) return ['err', `🔞 Classificação ${f.rating} anos`, `CPF indica ${age} anos. Este filme exige ${f.minAge}+ anos.`];
-  if (isStu && !validStu(sid)) return ['err', 'Carteira inválida', 'Informe número válido, ex: ID-2026-123456.'];
   return null;
 }
 
 /* ── PAYMENT ── */
-function openSeatPage() {
-  const filmEl = document.getElementById('b-film');
-  const session = document.getElementById('b-session').value;
-  const seat = document.getElementById('b-seat').value;
-  const category = document.getElementById('b-category').value;
-  const film = filmEl.options[filmEl.selectedIndex]?.textContent || '';
-  const url = new URL('seat-select.html', window.location.href);
-  if (film) url.searchParams.set('film', film);
-  if (session) url.searchParams.set('session', session);
-  if (seat) url.searchParams.set('seat', seat);
-  if (category) url.searchParams.set('category', category);
-  window.open(url.toString(), '_blank');
-}
 
-function openSeatChooser() {
-  createSeatChooser();
-  document.getElementById('seat-modal').classList.add('on');
-  document.body.style.overflow = 'hidden';
-}
-function closeSeatModal(e) {
-  if (e && e.target !== document.getElementById('seat-modal')) return;
-  document.getElementById('seat-modal').classList.remove('on');
-  document.body.style.overflow = '';
+
+function goToSeats() {
+  buildSeatsPage();
+  go('seats');
 }
 function confirmSeatChoice() {
-  if (!selectedSeat) return alert('Escolha uma poltrona para continuar.');
-  document.getElementById('b-seat').value = selectedSeat;
-  document.getElementById('b-seat-display').textContent = selectedSeat;
+  if (!selectedSeats.length) return alert('Selecione ao menos uma poltrona.');
+  // default each seat to 'inteira' if not yet typed
+  selectedSeats.forEach(s => { if (!seatTypes[s]) seatTypes[s] = 'inteira'; });
+  document.getElementById('b-seat').value = selectedSeats.join(', ');
+  document.getElementById('b-seat-display').textContent = selectedSeats.join(', ');
   closeSeatModal();
+  renderSeatTypes();
   refreshEstimate();
 }
-function rowSeats(row) {
-  if (row === PREFERENTIAL_ROW) return Array.from({ length: 8 }, (_, i) => i + 1);
-  return SEAT_COLS;
+
+function renderSeatTypes() {
+  const box = document.getElementById('seat-types-box');
+  const list = document.getElementById('seat-types-list');
+  if (!selectedSeats.length) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  list.innerHTML = selectedSeats.map(s => `
+    <div class="seat-type-row">
+      <span class="seat-type-label">Poltrona <strong>${s}</strong></span>
+      <select class="fselect seat-type-sel" data-seat="${s}" onchange="onSeatTypeChange('${s}', this.value)">
+        <option value="inteira" ${seatTypes[s]==='inteira'?'selected':''}>Inteira</option>
+        <option value="meia-estudante" ${seatTypes[s]==='meia-estudante'?'selected':''}>Meia — Estudante</option>
+        <option value="meia-60" ${seatTypes[s]==='meia-60'?'selected':''}>Meia — 60+ anos</option>
+      </select>
+    </div>`).join('');
+  updateSeatSummary();
 }
-function createSeatChooser() {
-  const grid = document.getElementById('seat-map-grid');
-  const list = document.getElementById('seat-row-list');
-  if (!grid || grid.dataset.ready) return;
+
+function onSeatTypeChange(seat, value) {
+  seatTypes[seat] = value;
+  updateSeatSummary();
+  refreshEstimate();
+}
+
+function updateSeatSummary() {
+  const cat = document.getElementById('b-category').value;
+  const extra = cat === 'vip' ? 10 : cat === 'imax' ? 18 : 0;
+  const pr = isPromo();
+  const counts = { inteira: 0, 'meia-estudante': 0, 'meia-60': 0 };
+  selectedSeats.forEach(s => counts[seatTypes[s] || 'inteira']++);
+  const baseInteira = pr ? 12 : 28;
+  const baseMeia = pr ? 6 : 14;
+  const total = (counts.inteira * (baseInteira + extra))
+              + ((counts['meia-estudante'] + counts['meia-60']) * (baseMeia + extra));
+  const lines = [];
+  if (counts.inteira) lines.push(`${counts.inteira}× Inteira — R$ ${(counts.inteira*(baseInteira+extra)).toFixed(2).replace('.',',')}`);
+  if (counts['meia-estudante']) lines.push(`${counts['meia-estudante']}× Meia (Estudante) — R$ ${(counts['meia-estudante']*(baseMeia+extra)).toFixed(2).replace('.',',')}`);
+  if (counts['meia-60']) lines.push(`${counts['meia-60']}× Meia (60+) — R$ ${(counts['meia-60']*(baseMeia+extra)).toFixed(2).replace('.',',')}`);
+  const sb = document.getElementById('seat-summary-box');
+  sb.innerHTML = lines.map(l => `<div class="seat-summary-line">${l}</div>`).join('')
+    + `<div class="seat-summary-total">Total: <strong>R$ ${total.toFixed(2).replace('.',',')}</strong></div>`;
+}
+function buildSeatsPage() {
+  const grid = document.getElementById('seats-full-grid');
+  if (grid.dataset.ready) { updateSeatsPanel(); return; }
   grid.dataset.ready = 'true';
-  SEAT_ROWS.forEach((row) => {
-    const rowBtn = document.createElement('button');
-    rowBtn.type = 'button';
-    rowBtn.className = 'seat-row-btn';
-    rowBtn.textContent = row === PREFERENTIAL_ROW ? `${row} • Preferencial` : row;
-    rowBtn.onclick = () => highlightRow(row);
-    list.appendChild(rowBtn);
+  const letters = 'ABCDEFGHIJKLMNO'.split('');
+  const PREF = 'H';
+  const BOOKED = new Set([]);
+  letters.forEach(letter => {
     const rowEl = document.createElement('div');
-    rowEl.className = 'seat-row';
-    rowEl.dataset.row = row;
-    rowEl.innerHTML = `
-      <div class="row-label">${row}</div>
-      <div class="seats-block"></div>
-      <div class="row-label">${row}</div>
-    `;
-    rowSeats(row).forEach(num => appendSeatChoice(rowEl.querySelector('.seats-block'), row, num));
+    rowEl.className = 'sp-row';
+    rowEl.innerHTML = `<div class="sp-row-label">${letter}</div><div class="sp-block" data-b="L"></div><div></div><div class="sp-block" data-b="R"></div><div class="sp-row-label">${letter}</div>`;
+    const left = [8,7,6,5];
+    const right = [4,3,2,1];
+    left.forEach(n => addSpSeat(rowEl.querySelector('[data-b="L"]'), letter, n, BOOKED, PREF));
+    right.forEach(n => addSpSeat(rowEl.querySelector('[data-b="R"]'), letter, n, BOOKED, PREF));
     grid.appendChild(rowEl);
   });
-  const initialSeat = document.getElementById('b-seat')?.value;
-  if (initialSeat) selectSeatCode(initialSeat);
-  highlightRow(SEAT_ROWS[Math.floor(SEAT_ROWS.length / 2)]);
+  // Mark already selected seats
+  selectedSeats.forEach(code => {
+    const sel = '[data-seat="' + code + '"]';
+    const el = document.querySelector('.sp-seat' + sel);
+    if (el) el.classList.add('sp-selected');
+  });
+  updateSeatsPanel();
 }
-function appendSeatChoice(container, row, num) {
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'seat-choice-btn';
-  if (row === PREFERENTIAL_ROW) btn.classList.add('preferential');
+
+function addSpSeat(container, letter, num, booked, pref) {
+  const btn = document.createElement('div');
+  const code = letter + num;
+  btn.className = 'sp-seat' + (letter === pref ? ' sp-pref' : '') + (booked.has(code) ? ' sp-booked' : '');
   btn.textContent = num;
-  const code = row + num;
   btn.dataset.seat = code;
-  btn.dataset.row = row;
-  if (SEAT_BOOKED.has(code)) {
-    btn.classList.add('booked');
-    btn.disabled = true;
-  } else {
-    btn.onclick = () => selectSeatCode(code);
-  }
+  if (!booked.has(code)) btn.onclick = () => toggleSpSeat(btn, code);
   container.appendChild(btn);
 }
-function highlightRow(row) {
-  document.querySelectorAll('.seat-row-btn').forEach(btn => btn.classList.toggle('active', btn.textContent.startsWith(row)));
-  const target = document.querySelector(`.seat-row[data-row="${row}"]`);
-  if (target) target.scrollIntoView({behavior: 'smooth', block: 'center'});
+
+function toggleSpSeat(btn, code) {
+  if (selectedSeats.includes(code)) {
+    selectedSeats = selectedSeats.filter(s => s !== code);
+    delete seatTypes[code];
+    btn.classList.remove('sp-selected');
+  } else {
+    if (selectedSeats.length >= 12) return;
+    selectedSeats.push(code);
+    seatTypes[code] = 'inteira';
+    btn.classList.add('sp-selected');
+  }
+  updateSeatsPanel();
 }
-function selectSeatCode(code) {
-  document.querySelectorAll('.seat-choice-btn.selected').forEach(btn => btn.classList.remove('selected'));
-  const btn = document.querySelector(`.seat-choice-btn[data-seat="${code}"]`);
-  if (btn) btn.classList.add('selected');
-  selectedSeat = code;
+
+function updateSeatsPanel() {
+  const count = selectedSeats.length;
+  const cat = document.getElementById('b-category')?.value || 'comum';
+  const catLbl = cat === 'vip' ? 'VIP' : cat === 'imax' ? 'IMAX' : 'Comum';
+  document.getElementById('sp-count').textContent = count || '0';
+  document.getElementById('sp-codes').textContent = count ? selectedSeats.join(', ') : '—';
+  document.getElementById('sp-category').textContent = catLbl;
+  const priceRow = document.getElementById('sp-price-row');
+  if (count > 0) {
+    priceRow.style.display = 'flex';
+    document.getElementById('sp-price').textContent = 'R$ ' + calcPrice().toFixed(2).replace('.', ',');
+  } else {
+    priceRow.style.display = 'none';
+  }
+}
+
+function confirmSeatsAndReturn() {
+  if (!selectedSeats.length) { alert('Selecione ao menos uma poltrona.'); return; }
+  selectedSeats.forEach(s => { if (!seatTypes[s]) seatTypes[s] = 'inteira'; });
+  document.getElementById('b-seat').value = selectedSeats.join(', ');
+  document.getElementById('b-seat-display').textContent = selectedSeats.join(', ');
+  renderSeatTypes();
+  refreshEstimate();
+  go('buy');
 }
 
 function openPay(target) {
@@ -491,7 +529,7 @@ function openPay(target) {
     const err = validateTicketForm();
     if (err) { al('buy-al', ...err); return; }
     document.getElementById('pay-total-v').textContent = 'R$ ' + calcPrice().toFixed(2);
-    document.getElementById('pay-sub').textContent = 'Ingresso · ' + document.getElementById('b-session').value;
+    document.getElementById('pay-sub').textContent = `${selectedSeats.length} ingresso(s) · ` + document.getElementById('b-session').value;
   } else {
     const nm = document.getElementById('sk-name').value.trim();
     const cpf = document.getElementById('sk-cpf').value;
@@ -558,29 +596,29 @@ function confirmPay() {
 function doTicket() {
   const filmId = parseInt(document.getElementById('b-film').value);
   const sess = document.getElementById('b-session').value;
-  const seat = document.getElementById('b-seat').value;
-  const category = document.getElementById('b-category').value;
+  const cat = document.getElementById('b-category').value;
   const nm = document.getElementById('b-name').value.trim();
   const email = document.getElementById('b-email').value.trim();
-  const cpf = document.getElementById('b-cpf').value;
-  const isStu = document.getElementById('b-student').checked;
   const f = FILMS.find(x => x.id === filmId);
-  const age = ageFromCPF(cpf);
   const pr = isPromo();
-  const extra = category === 'vip' ? 10 : category === 'imax' ? 18 : 0;
-  let base, type;
-  if (pr) { base = 12; type = 'Promocional'; }
-  else if (isStu) { base = 14; type = 'Meia (Estudante)'; }
-  else if (age >= 60) { base = 14; type = 'Meia (60+)'; }
-  else { base = 28; type = 'Inteira'; }
-  const total = base + extra;
-  const seatLbl = category === 'vip' ? 'VIP' : category === 'imax' ? 'IMAX' : 'Comum';
+  const extra = cat === 'vip' ? 10 : cat === 'imax' ? 18 : 0;
+  const catLbl = cat === 'vip' ? 'VIP' : cat === 'imax' ? 'IMAX' : 'Comum';
+  const baseInteira = pr ? 12 : 28;
+  const baseMeia = pr ? 6 : 14;
+  const counts = { inteira: 0, 'meia-estudante': 0, 'meia-60': 0 };
+  selectedSeats.forEach(s => counts[seatTypes[s] || 'inteira']++);
+  const total = calcPrice();
+  const typeSummary = [
+    counts.inteira ? `${counts.inteira}× Inteira` : '',
+    counts['meia-estudante'] ? `${counts['meia-estudante']}× Meia-Estud.` : '',
+    counts['meia-60'] ? `${counts['meia-60']}× Meia-60+` : ''
+  ].filter(Boolean).join(' · ');
   document.getElementById('t-film').textContent = f.emoji + ' ' + f.title;
   document.getElementById('t-sess').textContent = sess;
-  document.getElementById('t-seat').textContent = seat;
-  document.getElementById('t-type').textContent = seatLbl;
+  document.getElementById('t-seat').textContent = selectedSeats.join(', ');
+  document.getElementById('t-type').textContent = catLbl + ' · ' + typeSummary;
   document.getElementById('t-name').textContent = nm;
-  document.getElementById('t-price').textContent = 'R$ ' + total.toFixed(2);
+  document.getElementById('t-price').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
   document.getElementById('t-code').textContent = genCode('CD');
   document.getElementById('t-time').textContent = new Date().toLocaleString('pt-BR');
   document.getElementById('t-paid').style.display = 'inline-flex';
