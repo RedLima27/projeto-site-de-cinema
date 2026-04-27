@@ -13,7 +13,7 @@ Projeto web front-end de cinema com layout responsivo, compra de ingressos e bom
 
 ## Estrutura do projeto
 ```
-cinemax/
+CineDragon/
 ├── index.html
 ├── assets/
 │   ├── css/
