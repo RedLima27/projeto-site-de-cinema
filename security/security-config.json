@@ -1,10 +1,10 @@
 {
   "security": {
-    "name": "CINEMAX Security Configuration",
+    "name": "CINE_DRAGON Security Configuration",
     "version": "1.0.0",
     "date": "2026-04-25",
     "status": "production",
-    "description": "Configurações de segurança para a aplicação CineMax"
+    "description": "Configurações de segurança para a aplicação CineDragon"
   },
   "protection": {
     "xss": {
