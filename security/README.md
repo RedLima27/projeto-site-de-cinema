@@ -1,4 +1,4 @@
-# 🔒 MÓDULO DE SEGURANÇA - CINEMAX
+# 🔒 MÓDULO DE SEGURANÇA - CINEDRAGON
 
 ## Visão Geral
 Este módulo implementa boas práticas de segurança para prevenir invasões e ataques comuns em aplicações web.
