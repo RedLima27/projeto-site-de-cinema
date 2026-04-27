@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>CineMax</title>
+<title>CineDragon</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
@@ -11,13 +11,14 @@
 <body>
 
 <nav>
-  <div class="logo">CINEMAX</div>
+  <div class="logo" onclick="go('home')" role="button" tabindex="0">CINEDRAGON</div>
   <div class="nav-tabs">
     <button class="ntab on" onclick="go('home')">Em Cartaz</button>
     <button class="ntab" onclick="go('soon')">Em Breve</button>
     <button class="ntab" onclick="go('buy')">Ingressos</button>
     <button class="ntab" onclick="go('snacks')">Bomboniere</button>
   </div>
+  <button class="nav-back" onclick="goBack()">Voltar</button>
   <div class="promo-dot">
     <div class="dot" id="nav-dot"></div>
     <span class="nav-time" id="nav-time">--:--</span>
@@ -28,7 +29,7 @@
 <div id="pg-home" class="pg on">
   <div class="hero">
     <div class="hero-glow"></div>
-    <div class="hero-tag">✦ Bem-vindo ao CineMax</div>
+    <div class="hero-tag">✦ Bem-vindo ao CineDragon</div>
     <h1>A MELHOR<br><em>EXPERIÊNCIA</em><br>DO CINEMA</h1>
     <p class="hero-p">Filmes incríveis, bomboniere premium e seus códigos digitais na hora.</p>
     <div class="promo-banner">
@@ -57,6 +58,27 @@
   </div>
 </div>
 
+<!-- SOON DETAIL -->
+<div id="pg-soon-detail" class="pg">
+  <div class="sec">
+    <div class="sec-hd" style="justify-content:space-between;align-items:center">
+      <div class="sec-title" id="sd-title">🔍 Detalhes</div>
+      <button class="back-btn" onclick="goBack()">← Voltar</button>
+    </div>
+    <div class="sec-sub" id="sd-sub">Clique em um filme para ver mais detalhes.</div>
+    <div class="soon-detail-card">
+      <div class="soon-detail-img">
+        <img id="sd-img" src="" alt="" loading="lazy">
+        <div class="sd-fallback" id="sd-fallback" style="display:none">🎬</div>
+      </div>
+      <div class="soon-detail-info">
+        <div class="sd-meta" id="sd-meta"></div>
+        <p class="sd-desc" id="sd-desc"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- BUY -->
 <div id="pg-buy" class="pg">
   <div class="sec">
@@ -81,7 +103,14 @@
               </select>
             </div>
             <div class="fg"><label>Poltrona</label>
-              <select class="fselect" id="b-seat" onchange="refreshEstimate()">
+              <div class="seat-picker">
+                <button class="btn-sec" type="button" onclick="openSeatChooser()">Escolher assento</button>
+                <div class="seat-choice" id="b-seat-display">Nenhuma</div>
+                <input type="hidden" id="b-seat" value="">
+              </div>
+            </div>
+            <div class="fg"><label>Categoria</label>
+              <select class="fselect" id="b-category" onchange="refreshEstimate()">
                 <option value="comum">Comum</option>
                 <option value="vip">VIP (+R$10)</option>
                 <option value="imax">IMAX (+R$18)</option>
@@ -104,6 +133,7 @@
             <span class="pp-val" id="price-est">—</span>
           </div>
           <button class="btn-main" onclick="openPay('ticket')">Ir para pagamento →</button>
+          <button class="btn-sec" style="margin-top:.75rem" onclick="openSeatPage()">Selecionar assento em nova página</button>
           <div class="al" id="buy-al"><div class="al-t" id="buy-al-t"></div><div id="buy-al-m"></div></div>
         </div>
       </div>
@@ -114,7 +144,7 @@
           <div class="tkt-wrap" id="tkt-wrap">
             <div class="tkt">
               <div class="tkt-head">
-                <div class="tkt-cinema-nm">CINEMAX</div>
+                <div class="tkt-cinema-nm">CINEDRAGON</div>
                 <div style="font-size:10px;color:var(--muted)">São Paulo, SP · 2026</div>
               </div>
               <div class="tkt-body">
@@ -168,7 +198,7 @@
           <div class="tkt-wrap" id="sk-tkt-wrap">
             <div class="tkt" style="margin-top:.875rem">
               <div class="tkt-head">
-                <div class="tkt-cinema-nm">CINEMAX</div>
+                <div class="tkt-cinema-nm">CINEDRAGON</div>
                 <div style="font-size:10px;color:var(--muted)">Bomboniere</div>
               </div>
               <div class="tkt-body">
@@ -204,6 +234,32 @@
   </div>
 </div>
 
+<div class="modal-ov" id="seat-modal" onclick="closeSeatModal(event)">
+  <div class="modal seat-modal-box" onclick="event.stopPropagation()">
+    <div class="m-handle"></div>
+    <div class="m-header" style="justify-content:space-between;align-items:flex-start;gap:1rem;">
+      <div style="flex:1;min-width:0">
+        <div class="m-title">Selecione sua poltrona</div>
+        <div class="m-meta">Escolha a fila na barra lateral e depois o número do assento. Só uma poltrona por compra.</div>
+      </div>
+      <button class="mbtn mbtn-s" onclick="closeSeatModal()">Fechar</button>
+    </div>
+    <div class="seat-selector">
+      <div class="seat-area">
+        <div class="seat-screen">TELA</div>
+        <div class="seat-map-grid" id="seat-map-grid"></div>
+      </div>
+      <aside class="seat-rows-panel">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.75rem">Fileiras</div>
+        <div class="row-list" id="seat-row-list"></div>
+        <div class="preferential-note" id="preferential-note">Fileira H é preferencial. Apenas 8 assentos disponíveis.</div>
+      </aside>
+    </div>
+    <div class="seat-footer">As fileiras estão listadas verticalmente à direita. Cada poltrona mostra seu número.</div>
+    <button class="btn-main" style="margin-top:1rem" onclick="confirmSeatChoice()">Confirmar poltrona</button>
+  </div>
+</div>
+
 <!-- PAYMENT MODAL -->
 <div class="pay-modal" id="pay-modal">
   <div class="pay-box">
@@ -218,7 +274,7 @@
     </div>
     <div class="qr-zone" id="qr-zone">
       <div class="qr-img" id="qr-wrap"></div>
-      <div class="qr-key"><strong>Chave PIX CineMax</strong>pagamentos@cinemax.com.br</div>
+      <div class="qr-key"><strong>Chave PIX CineDragon</strong>pagamentos@cinedragon.com.br</div>
       <div class="qr-hint">Escaneie o QR code ou copie a chave PIX.<br>O código é gerado após a confirmação.</div>
     </div>
     <div class="card-zone" id="card-zone">
