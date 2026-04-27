@@ -102,14 +102,7 @@
                 <option>20:30 — Sala 2</option><option>22:00 — Sala 3</option>
               </select>
             </div>
-            <div class="fg"><label>Poltrona</label>
-              <div class="seat-picker">
-                <button class="btn-sec" type="button" onclick="openSeatChooser()">Escolher assento</button>
-                <div class="seat-choice" id="b-seat-display">Nenhuma</div>
-                <input type="hidden" id="b-seat" value="">
-              </div>
-            </div>
-            <div class="fg"><label>Categoria</label>
+            <div class="fg"><label>Categoria da Sala</label>
               <select class="fselect" id="b-category" onchange="refreshEstimate()">
                 <option value="comum">Comum</option>
                 <option value="vip">VIP (+R$10)</option>
@@ -117,14 +110,26 @@
               </select>
             </div>
           </div>
+          <div class="fg">
+            <label>Poltronas selecionadas</label>
+            <div class="seat-picker">
+              <button class="btn-sec" type="button" onclick="goToSeats()">🪑 Selecionar poltronas</button>
+              <div class="seat-choice" id="b-seat-display">Nenhuma selecionada</div>
+              <input type="hidden" id="b-seat" value="">
+            </div>
+          </div>
+          <div id="seat-types-box" style="display:none">
+            <label style="margin-bottom:.5rem">Tipo de entrada por poltrona</label>
+            <div id="seat-types-list" class="seat-types-list"></div>
+            <div class="seat-summary-box" id="seat-summary-box"></div>
+          </div>
         </div>
         <div class="card">
           <div class="card-title"><span class="step-n">2</span>Seus dados</div>
           <div class="fg"><label>Nome completo</label><input class="finput" id="b-name" type="text" placeholder="Seu nome completo" autocomplete="name"></div>
           <div class="fg"><label>CPF (verificação de idade)</label><input class="finput" id="b-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" oninput="maskCPF(this);refreshEstimate()"></div>
           <div class="fg"><label>Email</label><input class="finput" id="b-email" type="email" inputmode="email" placeholder="seu@email.com" autocomplete="email"></div>
-          <div class="cbox-row"><input type="checkbox" id="b-student" onchange="toggleStudent();refreshEstimate()"><label for="b-student">Sou estudante — meia-entrada</label></div>
-          <div id="student-box" style="display:none" class="fg"><label>Nº Carteira de Estudante</label><input class="finput" id="b-sid" placeholder="ID-2026-XXXXXX"></div>
+
         </div>
         <div class="card">
           <div class="card-title"><span class="step-n">3</span>Pagamento</div>
@@ -133,7 +138,6 @@
             <span class="pp-val" id="price-est">—</span>
           </div>
           <button class="btn-main" onclick="openPay('ticket')">Ir para pagamento →</button>
-          <button class="btn-sec" style="margin-top:.75rem" onclick="openSeatPage()">Selecionar assento em nova página</button>
           <div class="al" id="buy-al"><div class="al-t" id="buy-al-t"></div><div id="buy-al-m"></div></div>
         </div>
       </div>
@@ -217,6 +221,42 @@
   </div>
 </div>
 
+<!-- SEATS PAGE -->
+<div id="pg-seats" class="pg">
+  <div class="sec" style="max-width:1100px">
+    <div class="sec-hd" style="justify-content:space-between;align-items:center">
+      <div>
+        <div class="sec-title">🪑 Selecione as poltronas</div>
+        <div class="sec-sub">Clique para selecionar · Até 12 poltronas · Fileira H é preferencial</div>
+      </div>
+      <button class="back-btn" onclick="confirmSeatsAndReturn()">✓ Confirmar e voltar</button>
+    </div>
+    <div class="seats-page-layout">
+      <div class="seats-map-wrap">
+        <div class="seat-screen">TELA</div>
+        <div class="seats-full-grid" id="seats-full-grid"></div>
+        <div style="text-align:center;font-size:11px;color:var(--muted2);margin-top:1rem;letter-spacing:.15em">FUNDO DA SALA</div>
+      </div>
+      <aside class="seats-summary-panel">
+        <div class="seats-legend">
+          <div class="sl-item"><span class="sl-dot avail"></span>Disponível</div>
+          <div class="sl-item"><span class="sl-dot sel"></span>Selecionada</div>
+          <div class="sl-item"><span class="sl-dot occ"></span>Ocupada</div>
+          <div class="sl-item"><span class="sl-dot pref"></span>Preferencial</div>
+        </div>
+        <div class="seats-info-box">
+          <div class="sib-row"><span>Selecionadas</span><strong id="sp-count">0</strong></div>
+          <div class="sib-row"><span>Poltronas</span><strong id="sp-codes">—</strong></div>
+          <div class="sib-row"><span>Categoria</span><strong id="sp-category">—</strong></div>
+          <div class="sib-row" id="sp-price-row" style="display:none"><span>Total est.</span><strong id="sp-price" style="color:var(--gold)">—</strong></div>
+        </div>
+        <button class="btn-main" style="margin-top:auto" onclick="confirmSeatsAndReturn()">✓ Confirmar poltronas</button>
+        <button class="btn-sec" style="margin-top:.5rem" onclick="go('buy')">Cancelar</button>
+      </aside>
+    </div>
+  </div>
+</div>
+
 <!-- FILM MODAL -->
 <div class="modal-ov" id="film-modal" onclick="closeFModal(event)">
   <div class="modal">
@@ -239,23 +279,17 @@
     <div class="m-handle"></div>
     <div class="m-header" style="justify-content:space-between;align-items:flex-start;gap:1rem;">
       <div style="flex:1;min-width:0">
-        <div class="m-title">Selecione sua poltrona</div>
-        <div class="m-meta">Escolha a fila na barra lateral e depois o número do assento. Só uma poltrona por compra.</div>
+        <div class="m-title">Selecione as poltronas</div>
+        <div class="m-meta">Clique para selecionar. Até 12 poltronas por compra. Fileira H é preferencial.</div>
+        <div class="seat-selected-count" id="seat-selected-count">0 poltronas selecionadas</div>
       </div>
       <button class="mbtn mbtn-s" onclick="closeSeatModal()">Fechar</button>
     </div>
-    <div class="seat-selector">
-      <div class="seat-area">
+    <div class="seat-area">
         <div class="seat-screen">TELA</div>
         <div class="seat-map-grid" id="seat-map-grid"></div>
       </div>
-      <aside class="seat-rows-panel">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.75rem">Fileiras</div>
-        <div class="row-list" id="seat-row-list"></div>
-        <div class="preferential-note" id="preferential-note">Fileira H é preferencial. Apenas 8 assentos disponíveis.</div>
-      </aside>
-    </div>
-    <div class="seat-footer">As fileiras estão listadas verticalmente à direita. Cada poltrona mostra seu número.</div>
+      <div class="seat-footer">Fileira H é preferencial (destacada em laranja). Clique na poltrona desejada para selecioná-la.</div>
     <button class="btn-main" style="margin-top:1rem" onclick="confirmSeatChoice()">Confirmar poltrona</button>
   </div>
 </div>
