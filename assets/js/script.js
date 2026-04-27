@@ -1,39 +1,35 @@
-﻿/* ── DATA ── */
+/* ── DATA ── */
 const FILMS = [
   {id: 1, title: "Michael", genre: "Biopic / Musical", rating: "12", minAge: 12, emoji: "🎤", dur: "2h 08min", year: 2026,
    dir: "Antoine Fuqua", cast: "Jaafar Jackson, Colman Domingo, Nia Long, Miles Teller",
    desc: "A cinebiografia definitiva do Rei do Pop. O filme acompanha a trajetória de Michael Jackson desde sua infância em Gary, Indiana, passando pelo sucesso dos Jackson 5 nos anos 70, até se tornar o maior artista pop do mundo nos anos 80. Interpretado pelo sobrinho real Jaafar Jackson.",
-   img: "https://image.tmdb.org/t/p/w500/qjW3YMJEZJ9JjlQSBV2OlkB6JeK.jpg"},
+   img: "https://image.tmdb.org/t/p/w220_and_h330_face/2FYFBgdNVVaUgVfNSh9z5WVTZ9y.jpg"},
   {id: 2, title: "Super Mario Galaxy: O Filme", genre: "Animação / Aventura", rating: "L", minAge: 0, emoji: "🍄", dur: "1h 39min", year: 2026,
    dir: "Aaron Horvath, Michael Jelenic", cast: "Chris Pratt, Anya Taylor-Joy, Charlie Day",
    desc: "Mario e seus aliados embarcam em uma aventura galáctica após salvar o Reino dos Cogumelos. Cheio de ação e emoção para toda a família, o filme expande o universo do encanador mais famoso do mundo até as estrelas.",
-   img: "https://image.tmdb.org/t/p/w500/co6gLCTzfEVe0R0G2qCHDHCzGqv.jpg"},
+   img: "https://image.tmdb.org/t/p/w220_and_h330_face/b3WeTp42eJSRuE4UZfyPCOJW4c.jpg"},
   {id: 3, title: "O Diabo Veste Prada 2", genre: "Comédia / Drama", rating: "12", minAge: 12, emoji: "👠", dur: "2h 05min", year: 2026,
    dir: "David Frankel", cast: "Meryl Streep, Anne Hathaway, Emily Blunt",
    desc: "Miranda Priestly e Andy Sachs retornam em uma nova era da moda digital. Com as redes sociais transformando a indústria, a editora da Runway precisa se reinventar enquanto enfrenta uma rivalidade inesperada. Meryl Streep está mais deslumbrante do que nunca.",
-   img: "https://image.tmdb.org/t/p/w500/kc2r6RBhMWFYaVOT4yMPY0j8VxH.jpg"},
+   img: "https://image.tmdb.org/t/p/w220_and_h330_face/50yWyY981TyUHhoxxSEKwO70FmQ.jpg"},
   {id: 4, title: "Exit 8", genre: "Terror / Suspense", rating: "16", minAge: 16, emoji: "🚇", dur: "1h 45min", year: 2026,
    dir: "Genki Kawamura", cast: "Kazunari Ninomiya, Yamato Kôchi",
    desc: "Adaptação do viral jogo de terror japonês. Um homem fica preso em um corredor de metrô infinito e precisa encontrar a saída, mas a cada tentativa algo muda sutilmente. Um pesadelo psicológico que desafia percepção e sanidade.",
-   img: "https://image.tmdb.org/t/p/w500/6vn0tWXUiKXQGPMuMMBNQnXzn4W.jpg"},
+   img: "https://image.tmdb.org/t/p/w220_and_h330_face/naszJRWpzgbrR9vdifVoQ9IpNqW.jpg"},
   {id: 5, title: "Hokum: O Pesadelo da Bruxa", genre: "Terror", rating: "16", minAge: 16, emoji: "🔮", dur: "1h 52min", year: 2026,
    dir: "Damian McCarthy", cast: "Adam Scott, David Wilmot, Austin Amelio",
    desc: "Uma família se muda para uma casa aparentemente perfeita, mas algo sinistro os observa. Uma bruxa adormecida por séculos acorda com a chegada dos novos moradores. Terror psicológico e sobrenatural em dose dupla.",
-   img: "https://image.tmdb.org/t/p/w500/4XM8DUTQb3lhLemJC51Jx4a2EuA.jpg"},
-  {id: 6, title: "Vidas Entrelaçadas", genre: "Drama", rating: "14", minAge: 14, emoji: "💫", dur: "1h 58min", year: 2026,
-   dir: "Alice Winocour", cast: "Angelina Jolie, Ella Rumpf, Anyier Anei",
-   desc: "Três mulheres em continentes diferentes têm suas histórias misteriosamente ligadas por um evento. Angelina Jolie entrega uma de suas melhores performances neste drama poderoso sobre resiliência, perda e conexões humanas que transcendem fronteiras.",
-   img: "https://image.tmdb.org/t/p/w500/sOLHDPJoTnOqrKdFzX4i79BPXJZ.jpg"},
+   img: "https://image.tmdb.org/t/p/w220_and_h330_face/b9fyqIgQKW0VK1eKTsKKa5ijHOn.jpg"},
 ];
 const SOON = [
-  {title: "Mestres do Universo", genre: "Ação", emoji: "⚔️", date: "04/06/2026", desc: "He-Man em live action com Nicholas Galitzine, Idris Elba e Jared Leto como Esqueleto."},
-  {title: "Se Eu Fosse Você 3", genre: "Comédia", emoji: "🔄", date: "04/06/2026", desc: "Tony Ramos, Gloria Pires e a família toda trocam de corpo nesta comédia brasileira."},
-  {title: "Dia D", genre: "Ficção Científica", emoji: "🌍", date: "11/06/2026", desc: "Novo Spielberg com Emily Blunt e trilha de John Williams."},
-  {title: "Supergirl", genre: "Super-Herói", emoji: "🦸‍♀️", date: "25/06/2026", desc: "A prima de Superman e sua origem sombria antes de chegar à Terra."},
-  {title: "Toy Story 5", genre: "Animação", emoji: "🤠", date: "09/07/2026", desc: "Os brinquedos em polvorosa quando Bonnie ganha um tablet."},
-  {title: "A Odisseia", genre: "Épico", emoji: "🌊", date: "16/07/2026", desc: "Christopher Nolan adapta Homero em jornada épica com elenco estrelado."},
-  {title: "Vingadores: Doutor Destino", genre: "Super-Herói", emoji: "🦾", date: "17/12/2026", desc: "Robert Downey Jr. como Doutor Destino. X-Men, Quarteto Fantástico e Vingadores."},
-  {title: "Duna: Parte 3", genre: "Ficção Científica", emoji: "🏜️", date: "17/12/2026", desc: "Denis Villeneuve encerra a saga com Timothée Chalamet e Robert Pattinson."},
+  {title: "Mestres do Universo", genre: "Ação", emoji: "⚔️", date: "04/06/2026", dir: "Yann Demange", cast: "Nicholas Galitzine, Elodie Yung, Sarah Michelle Gellar", desc: "He-Man enfrenta uma ameaça cósmica em live action que mistura fantasia e aventura. Com visual épico, o filme traz um Rei Rand e o retorno de heróis lendários do universo Eternia.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/dobbDBQC0G9m65pcVaDM2D2aMr8.jpg"},
+  {title: "Mortal Kombat 2", genre: "Ação", emoji: "⚔️", date: "04/06/2026", dir: "Simon McQuoid", cast: "Ludi Lin, Jessica Henwick, Tadanobu Asano", desc: "Liu Kang reúne guerreiros de todas as dimensões para enfrentar uma nova invasão de Outworld. Prepare-se para combates brutais, poderes místicos e fatalidades icônicas na sequência oficial.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/jWOUkeXhlyDAmOm6RoznLVHKXRy.jpg"},
+  {title: "Dia D", genre: "Ficção Científica", emoji: "🌍", date: "11/06/2026", dir: "Steven Spielberg", cast: "Emily Blunt, Tom Holland, John David Washington", desc: "Um grupo de cientistas descobre um portal temporal que pode mudar o destino da Terra. Spielberg volta ao sci-fi com emoção, suspense e uma trilha sonora de arrepiar escrita por John Williams.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/pmff1wjKrgJi92PPr346lAifzlg.jpg"},
+  {title: "Supergirl", genre: "Super-Herói", emoji: "🦸‍♀️", date: "25/06/2026", dir: "Jenna Malone", cast: "Sasha Calle, Helen Slater, Michael Keaton", desc: "Kara Zor-El chega à Terra em um filme solo repleto de ação, identidade e luta por justiça. A história explora sua origem e o desafio de ser uma heroína sob a sombra do Superman.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/lJVug1z4VFIEAEopgiCxZy2yOzX.jpg"},
+  {title: "Toy Story 5", genre: "Animação", emoji: "🤠", date: "09/07/2026", dir: "Josh Cooley", cast: "Tom Hanks, Tim Allen, Annie Potts", desc: "Woody e Buzz retornam para uma nova aventura repleta de nostalgia. Quando Bonnie ganha um tablet misterioso, os brinquedos precisam salvar seu novo amigo e descobrir o verdadeiro significado de pertencimento.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/dlZR5AE2NfKeZYxCKAvLGKSjncS.jpg"},
+  {title: "A Odisseia", genre: "Épico", emoji: "🌊", date: "16/07/2026", dir: "Christopher Nolan", cast: "Timothée Chalamet, Zendaya, Oscar Isaac", desc: "Nolan reinventa o clássico de Homero como uma jornada grandiosa pelo Mediterrâneo. Guerreiros, monstros e deuses colidem em uma versão cinematográfica que promete emoção e suspense.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/lkShxOPlelgr3R7zYAcG00w6Z94.jpg"},
+  {title: "Vingadores: Doutor Destino", genre: "Super-Herói", emoji: "🦾", date: "17/12/2026", dir: "Sharmeen Obaid-Chinoy", cast: "Robert Downey Jr., Elizabeth Olsen, Patrick Stewart", desc: "Doutor Destino assume o controle das realidades em uma trama épica que junta X-Men, Quarteto Fantástico e Vingadores. Um evento de super-heróis com stakes cósmicos e traições inesperadas.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/i29O7K4n3z5qB2SAJmSc0kR5dPj.jpg"},
+  {title: "Duna: Parte 3", genre: "Ficção Científica", emoji: "🏜️", date: "17/12/2026", dir: "Denis Villeneuve", cast: "Timothée Chalamet, Zendaya, Florence Pugh", desc: "A conclusão da saga de Paul Atreides traz guerras interplanetárias, profecias e a luta pelo controle de Arrakis. Villeneuve entrega um final visualmente arrebatador e carregado de política e misticismo.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/b4wekkUaxExzOeGe7hKXzhnyXHt.jpg"}
 ];
 const SNACKS = [
   {id: 1, emoji: "🍿", name: "Pipoca Doce G", desc: "Manteiga caramelada", price: 18},
@@ -51,6 +47,11 @@ let cart = {};
 let payTarget = null;
 let payMethod = null;
 let promoState = null;
+const SEAT_ROWS = 'ABCDEFGHIJKLMNO'.split('');
+const SEAT_COLS = Array.from({ length: 12 }, (_, i) => i + 1);
+const SEAT_BOOKED = new Set([]); // todos os assentos agora estão desbloqueados
+const PREFERENTIAL_ROW = 'H';
+let selectedSeat = '';
 
 /* ── MASKS ── */
 function maskCPF(el) {
@@ -141,13 +142,28 @@ function tickClock() {
 }
 
 /* ── NAVIGATION ── */
-function go(name) {
+function go(name, pushState = true) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.ntab').forEach(t => t.classList.remove('on'));
-  document.getElementById('pg-' + name).classList.add('on');
-  document.querySelectorAll('.ntab')[{home:0,soon:1,buy:2,snacks:3}[name]].classList.add('on');
+  const target = document.getElementById('pg-' + name);
+  if (target) target.classList.add('on');
+  const tabIndex = {home:0,soon:1,buy:2,snacks:3}[name];
+  if (tabIndex !== undefined) {
+    document.querySelectorAll('.ntab')[tabIndex].classList.add('on');
+  }
   window.scrollTo({top: 0, behavior: 'smooth'});
+  if (pushState) {
+    history.pushState({page: name}, '', name === 'home' ? 'index.html' : '#' + name);
+  }
 }
+function goBack() {
+  if (window.history.length > 1) window.history.back();
+  else go('home');
+}
+window.onpopstate = (event) => {
+  const page = event.state?.page || 'home';
+  go(page, false);
+};
 
 /* ── FILM GRID ── */
 function renderFilms() {
@@ -216,16 +232,17 @@ function closeFModal(e) {
 /* ── SOON ── */
 function renderSoon() {
   const list = document.getElementById('soon-list');
-  SOON.forEach(s => {
+  SOON.forEach((s, i) => {
     const [d, m, y] = s.date.split('/').map(Number);
     const dt = new Date(y, m - 1, d);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const diff = Math.round((dt - today) / 864e5);
     const cd = diff < 0 ? 'Em cartaz' : diff === 0 ? 'Hoje!' : diff === 1 ? 'Amanhã!' : diff + ' dias';
+    const imgHtml = s.img ? `<img src="${s.img}" alt="${s.title}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.scard-fallback').style.display='flex'">` : '';
     list.innerHTML += `
-      <div class="scard">
-        <div class="scard-ico">${s.emoji}</div>
+      <div class="scard" onclick="openSoonDetail(${i})">
+        <div class="scard-ico">${imgHtml}<div class="scard-fallback" style="display:${s.img ? 'none' : 'flex'}">${s.emoji}</div></div>
         <div class="scard-info">
           <div class="scard-title">${s.title}</div>
           <div class="scard-genre">${s.genre}</div>
@@ -238,6 +255,31 @@ function renderSoon() {
       </div>
     `;
   });
+}
+function openSoonDetail(index) {
+  const s = SOON[index];
+  if (!s) return;
+  const img = document.getElementById('sd-img');
+  const fb = document.getElementById('sd-fallback');
+  fb.textContent = s.emoji;
+  fb.style.display = 'none';
+  img.onerror = () => {
+    img.style.display = 'none';
+    fb.style.display = 'flex';
+  };
+  if (s.img) {
+    img.style.display = 'block';
+    img.src = s.img;
+  } else {
+    img.style.display = 'none';
+    fb.style.display = 'flex';
+  }
+  img.alt = s.title;
+  document.getElementById('sd-title').textContent = s.title;
+  document.getElementById('sd-sub').textContent = `${s.genre} · ${s.date}`;
+  document.getElementById('sd-meta').textContent = `Direção: ${s.dir} · Elenco: ${s.cast}`;
+  document.getElementById('sd-desc').textContent = s.desc;
+  go('soon-detail');
 }
 
 /* ── SNACKS ── */
@@ -312,8 +354,8 @@ function calcPrice() {
   const pr = isPromo();
   const isStu = document.getElementById('b-student').checked;
   const cpf = document.getElementById('b-cpf').value;
-  const seat = document.getElementById('b-seat').value;
-  const extra = seat === 'vip' ? 10 : seat === 'imax' ? 18 : 0;
+  const category = document.getElementById('b-category').value;
+  const extra = category === 'vip' ? 10 : category === 'imax' ? 18 : 0;
   let base = 28;
   if (pr) base = 12;
   else if (isStu) base = 14;
@@ -330,6 +372,8 @@ function refreshEstimate() {
 function validateTicketForm() {
   const filmId = parseInt(document.getElementById('b-film').value);
   const sess = document.getElementById('b-session').value;
+  const seat = document.getElementById('b-seat').value;
+  const category = document.getElementById('b-category').value;
   const nm = document.getElementById('b-name').value.trim();
   const cpf = document.getElementById('b-cpf').value;
   const em = document.getElementById('b-email').value.trim();
@@ -337,6 +381,7 @@ function validateTicketForm() {
   const sid = document.getElementById('b-sid')?.value || '';
   if (!filmId) return ['warn', 'Selecione um filme', 'Escolha o filme desejado.'];
   if (!sess) return ['warn', 'Selecione um horário', 'Escolha o horário da sessão.'];
+  if (!seat) return ['warn', 'Selecione uma poltrona', 'Escolha sua poltrona na janela de seleção.'];
   if (!nm) return ['warn', 'Nome obrigatório', 'Informe seu nome completo.'];
   if (!em || !em.includes('@')) return ['warn', 'Email inválido', 'Informe um email válido.'];
   if (!validCPF(cpf)) return ['err', 'CPF inválido', 'O CPF informado não é válido. Verifique os dígitos e tente novamente.'];
@@ -348,6 +393,97 @@ function validateTicketForm() {
 }
 
 /* ── PAYMENT ── */
+function openSeatPage() {
+  const filmEl = document.getElementById('b-film');
+  const session = document.getElementById('b-session').value;
+  const seat = document.getElementById('b-seat').value;
+  const category = document.getElementById('b-category').value;
+  const film = filmEl.options[filmEl.selectedIndex]?.textContent || '';
+  const url = new URL('seat-select.html', window.location.href);
+  if (film) url.searchParams.set('film', film);
+  if (session) url.searchParams.set('session', session);
+  if (seat) url.searchParams.set('seat', seat);
+  if (category) url.searchParams.set('category', category);
+  window.open(url.toString(), '_blank');
+}
+
+function openSeatChooser() {
+  createSeatChooser();
+  document.getElementById('seat-modal').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeSeatModal(e) {
+  if (e && e.target !== document.getElementById('seat-modal')) return;
+  document.getElementById('seat-modal').classList.remove('on');
+  document.body.style.overflow = '';
+}
+function confirmSeatChoice() {
+  if (!selectedSeat) return alert('Escolha uma poltrona para continuar.');
+  document.getElementById('b-seat').value = selectedSeat;
+  document.getElementById('b-seat-display').textContent = selectedSeat;
+  closeSeatModal();
+  refreshEstimate();
+}
+function rowSeats(row) {
+  if (row === PREFERENTIAL_ROW) return Array.from({ length: 8 }, (_, i) => i + 1);
+  return SEAT_COLS;
+}
+function createSeatChooser() {
+  const grid = document.getElementById('seat-map-grid');
+  const list = document.getElementById('seat-row-list');
+  if (!grid || grid.dataset.ready) return;
+  grid.dataset.ready = 'true';
+  SEAT_ROWS.forEach((row) => {
+    const rowBtn = document.createElement('button');
+    rowBtn.type = 'button';
+    rowBtn.className = 'seat-row-btn';
+    rowBtn.textContent = row === PREFERENTIAL_ROW ? `${row} • Preferencial` : row;
+    rowBtn.onclick = () => highlightRow(row);
+    list.appendChild(rowBtn);
+    const rowEl = document.createElement('div');
+    rowEl.className = 'seat-row';
+    rowEl.dataset.row = row;
+    rowEl.innerHTML = `
+      <div class="row-label">${row}</div>
+      <div class="seats-block"></div>
+      <div class="row-label">${row}</div>
+    `;
+    rowSeats(row).forEach(num => appendSeatChoice(rowEl.querySelector('.seats-block'), row, num));
+    grid.appendChild(rowEl);
+  });
+  const initialSeat = document.getElementById('b-seat')?.value;
+  if (initialSeat) selectSeatCode(initialSeat);
+  highlightRow(SEAT_ROWS[Math.floor(SEAT_ROWS.length / 2)]);
+}
+function appendSeatChoice(container, row, num) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'seat-choice-btn';
+  if (row === PREFERENTIAL_ROW) btn.classList.add('preferential');
+  btn.textContent = num;
+  const code = row + num;
+  btn.dataset.seat = code;
+  btn.dataset.row = row;
+  if (SEAT_BOOKED.has(code)) {
+    btn.classList.add('booked');
+    btn.disabled = true;
+  } else {
+    btn.onclick = () => selectSeatCode(code);
+  }
+  container.appendChild(btn);
+}
+function highlightRow(row) {
+  document.querySelectorAll('.seat-row-btn').forEach(btn => btn.classList.toggle('active', btn.textContent.startsWith(row)));
+  const target = document.querySelector(`.seat-row[data-row="${row}"]`);
+  if (target) target.scrollIntoView({behavior: 'smooth', block: 'center'});
+}
+function selectSeatCode(code) {
+  document.querySelectorAll('.seat-choice-btn.selected').forEach(btn => btn.classList.remove('selected'));
+  const btn = document.querySelector(`.seat-choice-btn[data-seat="${code}"]`);
+  if (btn) btn.classList.add('selected');
+  selectedSeat = code;
+}
+
 function openPay(target) {
   hal('buy-al');
   hal('sk-al');
@@ -423,6 +559,7 @@ function doTicket() {
   const filmId = parseInt(document.getElementById('b-film').value);
   const sess = document.getElementById('b-session').value;
   const seat = document.getElementById('b-seat').value;
+  const category = document.getElementById('b-category').value;
   const nm = document.getElementById('b-name').value.trim();
   const email = document.getElementById('b-email').value.trim();
   const cpf = document.getElementById('b-cpf').value;
@@ -430,21 +567,21 @@ function doTicket() {
   const f = FILMS.find(x => x.id === filmId);
   const age = ageFromCPF(cpf);
   const pr = isPromo();
-  const extra = seat === 'vip' ? 10 : seat === 'imax' ? 18 : 0;
+  const extra = category === 'vip' ? 10 : category === 'imax' ? 18 : 0;
   let base, type;
   if (pr) { base = 12; type = 'Promocional'; }
   else if (isStu) { base = 14; type = 'Meia (Estudante)'; }
   else if (age >= 60) { base = 14; type = 'Meia (60+)'; }
   else { base = 28; type = 'Inteira'; }
   const total = base + extra;
-  const seatLbl = seat === 'vip' ? 'VIP' : seat === 'imax' ? 'IMAX' : 'Comum';
+  const seatLbl = category === 'vip' ? 'VIP' : category === 'imax' ? 'IMAX' : 'Comum';
   document.getElementById('t-film').textContent = f.emoji + ' ' + f.title;
   document.getElementById('t-sess').textContent = sess;
-  document.getElementById('t-seat').textContent = seatLbl;
-  document.getElementById('t-type').textContent = type;
+  document.getElementById('t-seat').textContent = seat;
+  document.getElementById('t-type').textContent = seatLbl;
   document.getElementById('t-name').textContent = nm;
   document.getElementById('t-price').textContent = 'R$ ' + total.toFixed(2);
-  document.getElementById('t-code').textContent = genCode('CX');
+  document.getElementById('t-code').textContent = genCode('CD');
   document.getElementById('t-time').textContent = new Date().toLocaleString('pt-BR');
   document.getElementById('t-paid').style.display = 'inline-flex';
   const act = SNACKS.filter(s => cart[s.id] > 0);
@@ -481,5 +618,6 @@ function doSnack() {
 renderFilms();
 renderSoon();
 renderSnacks();
+createSeatChooser();
 tickClock();
 setInterval(tickClock, 1000);
