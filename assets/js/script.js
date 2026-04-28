@@ -1,3 +1,6 @@
+/* ── CONFIG ── */
+const API_URL = window.location.origin;
+
 /* ── DATA ── */
 const FILMS = [
   {id: 1, title: "Michael", genre: "Biopic / Musical", rating: "12", minAge: 12, emoji: "🎤", dur: "2h 08min", year: 2026,
@@ -22,14 +25,14 @@ const FILMS = [
    img: "https://image.tmdb.org/t/p/w220_and_h330_face/b9fyqIgQKW0VK1eKTsKKa5ijHOn.jpg"},
 ];
 const SOON = [
-  {title: "Mestres do Universo", genre: "Ação", emoji: "⚔️", date: "04/06/2026", dir: "Yann Demange", cast: "Nicholas Galitzine, Elodie Yung, Sarah Michelle Gellar", desc: "He-Man enfrenta uma ameaça cósmica em live action que mistura fantasia e aventura. Com visual épico, o filme traz um Rei Rand e o retorno de heróis lendários do universo Eternia.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/dobbDBQC0G9m65pcVaDM2D2aMr8.jpg"},
-  {title: "Mortal Kombat 2", genre: "Ação", emoji: "⚔️", date: "04/06/2026", dir: "Simon McQuoid", cast: "Ludi Lin, Jessica Henwick, Tadanobu Asano", desc: "Liu Kang reúne guerreiros de todas as dimensões para enfrentar uma nova invasão de Outworld. Prepare-se para combates brutais, poderes místicos e fatalidades icônicas na sequência oficial.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/jWOUkeXhlyDAmOm6RoznLVHKXRy.jpg"},
-  {title: "Dia D", genre: "Ficção Científica", emoji: "🌍", date: "11/06/2026", dir: "Steven Spielberg", cast: "Emily Blunt, Tom Holland, John David Washington", desc: "Um grupo de cientistas descobre um portal temporal que pode mudar o destino da Terra. Spielberg volta ao sci-fi com emoção, suspense e uma trilha sonora de arrepiar escrita por John Williams.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/pmff1wjKrgJi92PPr346lAifzlg.jpg"},
-  {title: "Supergirl", genre: "Super-Herói", emoji: "🦸‍♀️", date: "25/06/2026", dir: "Jenna Malone", cast: "Sasha Calle, Helen Slater, Michael Keaton", desc: "Kara Zor-El chega à Terra em um filme solo repleto de ação, identidade e luta por justiça. A história explora sua origem e o desafio de ser uma heroína sob a sombra do Superman.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/lJVug1z4VFIEAEopgiCxZy2yOzX.jpg"},
-  {title: "Toy Story 5", genre: "Animação", emoji: "🤠", date: "09/07/2026", dir: "Josh Cooley", cast: "Tom Hanks, Tim Allen, Annie Potts", desc: "Woody e Buzz retornam para uma nova aventura repleta de nostalgia. Quando Bonnie ganha um tablet misterioso, os brinquedos precisam salvar seu novo amigo e descobrir o verdadeiro significado de pertencimento.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/dlZR5AE2NfKeZYxCKAvLGKSjncS.jpg"},
-  {title: "A Odisseia", genre: "Épico", emoji: "🌊", date: "16/07/2026", dir: "Christopher Nolan", cast: "Timothée Chalamet, Zendaya, Oscar Isaac", desc: "Nolan reinventa o clássico de Homero como uma jornada grandiosa pelo Mediterrâneo. Guerreiros, monstros e deuses colidem em uma versão cinematográfica que promete emoção e suspense.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/lkShxOPlelgr3R7zYAcG00w6Z94.jpg"},
-  {title: "Vingadores: Doutor Destino", genre: "Super-Herói", emoji: "🦾", date: "17/12/2026", dir: "Sharmeen Obaid-Chinoy", cast: "Robert Downey Jr., Elizabeth Olsen, Patrick Stewart", desc: "Doutor Destino assume o controle das realidades em uma trama épica que junta X-Men, Quarteto Fantástico e Vingadores. Um evento de super-heróis com stakes cósmicos e traições inesperadas.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/i29O7K4n3z5qB2SAJmSc0kR5dPj.jpg"},
-  {title: "Duna: Parte 3", genre: "Ficção Científica", emoji: "🏜️", date: "17/12/2026", dir: "Denis Villeneuve", cast: "Timothée Chalamet, Zendaya, Florence Pugh", desc: "A conclusão da saga de Paul Atreides traz guerras interplanetárias, profecias e a luta pelo controle de Arrakis. Villeneuve entrega um final visualmente arrebatador e carregado de política e misticismo.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/b4wekkUaxExzOeGe7hKXzhnyXHt.jpg"}
+  {title: "Mestres do Universo", genre: "Ação", rating: "12", minAge: 12, emoji: "⚔️", date: "04/06/2026", dir: "Yann Demange", cast: "Nicholas Galitzine, Elodie Yung, Sarah Michelle Gellar", desc: "He-Man enfrenta uma ameaça cósmica em live action que mistura fantasia e aventura. Com visual épico, o filme traz um Rei Rand e o retorno de heróis lendários do universo Eternia.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/dobbDBQC0G9m65pcVaDM2D2aMr8.jpg"},
+  {title: "Mortal Kombat 2", genre: "Ação", rating: "16", minAge: 16, emoji: "⚔️", date: "04/06/2026", dir: "Simon McQuoid", cast: "Ludi Lin, Jessica Henwick, Tadanobu Asano", desc: "Liu Kang reúne guerreiros de todas as dimensões para enfrentar uma nova invasão de Outworld. Prepare-se para combates brutais, poderes místicos e fatalidades icônicas na sequência oficial.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/jWOUkeXhlyDAmOm6RoznLVHKXRy.jpg"},
+  {title: "Dia D", genre: "Ficção Científica", rating: "14", minAge: 14, emoji: "🌍", date: "11/06/2026", dir: "Steven Spielberg", cast: "Emily Blunt, Tom Holland, John David Washington", desc: "Um grupo de cientistas descobre um portal temporal que pode mudar o destino da Terra. Spielberg volta ao sci-fi com emoção, suspense e uma trilha sonora de arrepiar escrita por John Williams.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/pmff1wjKrgJi92PPr346lAifzlg.jpg"},
+  {title: "Supergirl", genre: "Super-Herói", rating: "12", minAge: 12, emoji: "🦸‍♀️", date: "25/06/2026", dir: "Jenna Malone", cast: "Sasha Calle, Helen Slater, Michael Keaton", desc: "Kara Zor-El chega à Terra em um filme solo repleto de ação, identidade e luta por justiça. A história explora sua origem e o desafio de ser uma heroína sob a sombra do Superman.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/lJVug1z4VFIEAEopgiCxZy2yOzX.jpg"},
+  {title: "Toy Story 5", genre: "Animação", rating: "L", minAge: 0, emoji: "🤠", date: "09/07/2026", dir: "Josh Cooley", cast: "Tom Hanks, Tim Allen, Annie Potts", desc: "Woody e Buzz retornam para uma nova aventura repleta de nostalgia. Quando Bonnie ganha um tablet misterioso, os brinquedos precisam salvar seu novo amigo e descobrir o verdadeiro significado de pertencimento.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/dlZR5AE2NfKeZYxCKAvLGKSjncS.jpg"},
+  {title: "A Odisseia", genre: "Épico", rating: "14", minAge: 14, emoji: "🌊", date: "16/07/2026", dir: "Christopher Nolan", cast: "Timothée Chalamet, Zendaya, Oscar Isaac", desc: "Nolan reinventa o clássico de Homero como uma jornada grandiosa pelo Mediterrâneo. Guerreiros, monstros e deuses colidem em uma versão cinematográfica que promete emoção e suspense.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/lkShxOPlelgr3R7zYAcG00w6Z94.jpg"},
+  {title: "Vingadores: Doutor Destino", genre: "Super-Herói", rating: "12", minAge: 12, emoji: "🦾", date: "17/12/2026", dir: "Sharmeen Obaid-Chinoy", cast: "Robert Downey Jr., Elizabeth Olsen, Patrick Stewart", desc: "Doutor Destino assume o controle das realidades em uma trama épica que junta X-Men, Quarteto Fantástico e Vingadores. Um evento de super-heróis com stakes cósmicos e traições inesperadas.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/i29O7K4n3z5qB2SAJmSc0kR5dPj.jpg"},
+  {title: "Duna: Parte 3", genre: "Ficção Científica", rating: "14", minAge: 14, emoji: "🏜️", date: "17/12/2026", dir: "Denis Villeneuve", cast: "Timothée Chalamet, Zendaya, Florence Pugh", desc: "A conclusão da saga de Paul Atreides traz guerras interplanetárias, profecias e a luta pelo controle de Arrakis. Villeneuve entrega um final visualmente arrebatador e carregado de política e misticismo.", img: "https://media.themoviedb.org/t/p/w220_and_h330_face/b4wekkUaxExzOeGe7hKXzhnyXHt.jpg"}
 ];
 const SNACKS = [
   {id: 1, emoji: "🍿", name: "Pipoca Doce G", desc: "Manteiga caramelada", price: 18},
@@ -121,50 +124,160 @@ function isPromo() {
   return t >= 720 && t < 1020;
 }
 
-/* ── CLOCK ── */
-function tickClock() {
-  const now = new Date();
-  document.getElementById('hero-clock').textContent = '⏰ Agora: ' + now.toLocaleTimeString('pt-BR');
-  document.getElementById('nav-time').textContent = now.toLocaleTimeString('pt-BR').slice(0, 5);
-  const pr = isPromo();
-  if (pr !== promoState) {
-    promoState = pr;
-    document.getElementById('nav-dot').className = pr ? 'dot on' : 'dot';
-    const b = document.getElementById('promo-badge');
-    if (b) {
-      if (pr) { b.className = 'pb-badge on'; b.textContent = 'ATIVA'; }
-      else { b.className = 'pb-badge off'; b.textContent = now.getHours() < 12 ? '12h–17h' : 'Encerrada'; }
-    }
-  }
-  if (document.getElementById('b-film')?.value) {
-    document.getElementById('price-preview').style.display = 'flex';
-    document.getElementById('price-est').textContent = 'R$ ' + calcPrice().toFixed(2).replace('.', ',');
+
+/* ── AGE VERIFICATION ── */
+let _pendingFilmId = null;
+let _ageCallback = null;
+
+function openAgeModal(filmId, callback) {
+  _ageCallback = callback || null;
+  const f = FILMS.find(x => x.id === filmId);
+  if (!f) return;
+  _pendingFilmId = filmId;
+  const icon = f.minAge >= 18 ? '🔞' : f.minAge >= 16 ? '⚠️' : f.minAge >= 12 ? '🎬' : '✅';
+  document.getElementById('age-modal-icon').textContent = icon;
+  document.getElementById('age-modal-title').textContent = f.minAge === 0
+    ? 'Filme Livre — Confirmar'
+    : 'Classificação ' + f.rating + ' anos';
+  document.getElementById('age-modal-desc').textContent = f.minAge === 0
+    ? 'Confirme seu CPF para emitir o ingresso.'
+    : 'Este filme exige ' + f.minAge + '+ anos. Confirme seu CPF e data de nascimento.';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('age-dob').max = today;
+  document.getElementById('age-cpf').value = document.getElementById('b-cpf')?.value || '';
+  document.getElementById('age-dob').value = '';
+  document.getElementById('age-result').textContent = '';
+  document.getElementById('age-confirm-btn').disabled = true;
+  document.getElementById('age-modal').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAgeModal(e) {
+  if (e && e.target !== document.getElementById('age-modal')) return;
+  _doCloseAgeModal();
+}
+function _doCloseAgeModal() {
+  document.getElementById('age-modal').classList.remove('on');
+  document.body.style.overflow = '';
+  _pendingFilmId = null;
+}
+
+function ageCheckLive() {
+  const f = FILMS.find(x => x.id === _pendingFilmId);
+  if (!f) return;
+  const dob = document.getElementById('age-dob').value;
+  const res = document.getElementById('age-result');
+  const btn = document.getElementById('age-confirm-btn');
+  if (!dob) { res.textContent = ''; btn.disabled = true; return; }
+  const age = calcAgeFromDOB(dob);
+  if (f.minAge === 0) {
+    res.className = 'age-result ok';
+    res.textContent = 'Filme livre — entrada permitida para todas as idades.';
+    btn.disabled = false;
+  } else if (age < 16) {
+    res.className = 'age-result err';
+    res.textContent = 'Idade mínima para comprar ingressos é 16 anos (você tem ' + age + ' anos).';
+    btn.disabled = true;
+  } else if (age < f.minAge) {
+    res.className = 'age-result err';
+    res.textContent = 'Você tem ' + age + ' anos. Este filme exige ' + f.minAge + '+ anos. Compra bloqueada.';
+    btn.disabled = true;
+  } else {
+    res.className = 'age-result ok';
+    res.textContent = 'Idade confirmada (' + age + ' anos). Compra autorizada.';
+    btn.disabled = false;
   }
 }
 
+function calcAgeFromDOB(dob) {
+  const [y, m, d] = dob.split('-').map(Number);
+  const today = new Date();
+  let age = today.getFullYear() - y;
+  if (today.getMonth() + 1 < m || (today.getMonth() + 1 === m && today.getDate() < d)) age--;
+  return age;
+}
+
+function confirmAge() {
+  const f = FILMS.find(x => x.id === _pendingFilmId);
+  if (!f) return;
+  const dob = document.getElementById('age-dob').value;
+  const cpf = document.getElementById('age-cpf').value;
+  if (!dob) return;
+  const age = calcAgeFromDOB(dob);
+  if (f.minAge > 0 && age < Math.max(f.minAge, 16)) return;
+  const btn = document.getElementById('age-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Verificando...';
+  fetch(API_URL + '/api/age-verify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filmId: _pendingFilmId, cpf, dob })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (!data.ok) {
+      const res = document.getElementById('age-result');
+      res.className = 'age-result err';
+      res.textContent = data.message || data.error;
+      btn.disabled = false;
+      btn.textContent = 'Confirmar';
+      return;
+    }
+    if (cpf) document.getElementById('b-cpf').value = cpf;
+    _doCloseAgeModal();
+    if (_ageCallback) _ageCallback();
+  })
+  .catch(() => {
+    if (cpf) document.getElementById('b-cpf').value = cpf;
+    _doCloseAgeModal();
+    if (_ageCallback) _ageCallback();
+  });
+}
+
+/* ── CLOCK ── */
+function tickClock() {
+  try {
+    const now = new Date();
+    const hc = document.getElementById('hero-clock');
+    const nt = document.getElementById('nav-time');
+    if (hc) hc.textContent = '⏰ Agora: ' + now.toLocaleTimeString('pt-BR');
+    if (nt) nt.textContent = now.toLocaleTimeString('pt-BR').slice(0, 5);
+    const pr = isPromo();
+    if (pr !== promoState) {
+      promoState = pr;
+      const dot = document.getElementById('nav-dot');
+      if (dot) dot.className = pr ? 'dot on' : 'dot';
+      const b = document.getElementById('promo-badge');
+      if (b) {
+        if (pr) { b.className = 'pb-badge on'; b.textContent = 'ATIVA'; }
+        else { b.className = 'pb-badge off'; b.textContent = now.getHours() < 12 ? '12h–17h' : 'Encerrada'; }
+      }
+    }
+    if (document.getElementById('b-film')?.value) {
+      const pp = document.getElementById('price-preview');
+      const pe = document.getElementById('price-est');
+      if (pp) pp.style.display = 'flex';
+      if (pe) pe.textContent = 'R$ ' + calcPrice().toFixed(2).replace('.', ',');
+    }
+  } catch(e) {}
+}
+
 /* ── NAVIGATION ── */
-function go(name, pushState = true) {
+let _navStack = ['home'];
+function go(name, pushToStack = true) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.ntab').forEach(t => t.classList.remove('on'));
   const target = document.getElementById('pg-' + name);
   if (target) target.classList.add('on');
   const tabIndex = {home:0,soon:1,buy:2,snacks:3}[name];
-  if (tabIndex !== undefined) {
-    document.querySelectorAll('.ntab')[tabIndex].classList.add('on');
-  }
+  if (tabIndex !== undefined) document.querySelectorAll('.ntab')[tabIndex].classList.add('on');
   window.scrollTo({top: 0, behavior: 'smooth'});
-  if (pushState) {
-    history.pushState({page: name}, '', name === 'home' ? 'index.html' : '#' + name);
-  }
+  if (pushToStack && _navStack[_navStack.length - 1] !== name) _navStack.push(name);
 }
 function goBack() {
-  if (window.history.length > 1) window.history.back();
-  else go('home');
+  if (_navStack.length > 1) { _navStack.pop(); go(_navStack[_navStack.length - 1], false); }
+  else go('home', false);
 }
-window.onpopstate = (event) => {
-  const page = event.state?.page || 'home';
-  go(page, false);
-};
 
 /* ── FILM GRID ── */
 function renderFilms() {
@@ -252,6 +365,7 @@ function renderSoon() {
         <div class="scard-right">
           <div class="scard-date">📅 ${s.date}</div>
           <div class="scard-cd">⏳ ${cd}</div>
+          ${s.rating ? `<div class="rating-badge r${s.rating}">${s.rating === "L" ? "Livre" : s.rating + " anos"}</div>` : ""}
         </div>
       </div>
     `;
@@ -384,6 +498,12 @@ function validateTicketForm() {
   const f = FILMS.find(x => x.id === filmId);
   const age = ageFromCPF(cpf);
   if (f.minAge > 0 && age < f.minAge) return ['err', `🔞 Classificação ${f.rating} anos`, `CPF indica ${age} anos. Este filme exige ${f.minAge}+ anos.`];
+  // RA check for meia-estudante seats
+  const hasMeiaEstu = selectedSeats.some(s => (seatTypes[s] || 'inteira') === 'meia-estudante');
+  if (hasMeiaEstu) {
+    const ra = document.getElementById('b-ra')?.value?.trim();
+    if (!ra || ra.length < 5) return ['err', 'RA obrigatório', 'Informe o RA (Registro Acadêmico) para ingressos meia-estudante.'];
+  }
   return null;
 }
 
@@ -426,6 +546,10 @@ function onSeatTypeChange(seat, value) {
   seatTypes[seat] = value;
   updateSeatSummary();
   refreshEstimate();
+  // Show RA field if any seat is meia-estudante
+  const hasMeiaEstu = selectedSeats.some(s => (seatTypes[s] || 'inteira') === 'meia-estudante');
+  const raBox = document.getElementById('ra-box');
+  if (raBox) raBox.style.display = hasMeiaEstu ? 'block' : 'none';
 }
 
 function updateSeatSummary() {
@@ -523,6 +647,19 @@ function confirmSeatsAndReturn() {
 }
 
 function openPay(target) {
+  if (target === 'ticket') {
+    const filmId = parseInt(document.getElementById('b-film').value);
+    const f = FILMS.find(x => x.id === filmId);
+    if (f && f.minAge > 0) {
+      const err = validateTicketForm();
+      if (err) { al('buy-al', err[0], err[1], err[2]); return; }
+      openAgeModal(filmId, () => _proceedToPay(target));
+      return;
+    }
+  }
+  _proceedToPay(target);
+}
+function _proceedToPay(target) {
   hal('buy-al');
   hal('sk-al');
   if (target === 'ticket') {
@@ -549,6 +686,7 @@ function openPay(target) {
   document.getElementById('pay-modal').classList.add('on');
   document.body.style.overflow = 'hidden';
 }
+
 function closePay() {
   document.getElementById('pay-modal').classList.remove('on');
   document.body.style.overflow = '';
@@ -657,5 +795,4 @@ renderFilms();
 renderSoon();
 renderSnacks();
 createSeatChooser();
-tickClock();
-setInterval(tickClock, 1000);
+document.addEventListener("DOMContentLoaded", () => { tickClock(); setInterval(tickClock, 1000); });
