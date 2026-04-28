@@ -118,6 +118,11 @@
               <input type="hidden" id="b-seat" value="">
             </div>
           </div>
+          <div id="ra-box" style="display:none" class="fg">
+            <label>RA — Registro Acadêmico</label>
+            <input class="finput" id="b-ra" type="text" placeholder="Ex: 12345678" oninput="refreshEstimate()">
+            <div style="font-size:11px;color:var(--muted);margin-top:.25rem">Obrigatório para ingressos meia-estudante</div>
+          </div>
           <div id="seat-types-box" style="display:none">
             <label style="margin-bottom:.5rem">Tipo de entrada por poltrona</label>
             <div id="seat-types-list" class="seat-types-list"></div>
@@ -253,6 +258,25 @@
         <button class="btn-main" style="margin-top:auto" onclick="confirmSeatsAndReturn()">✓ Confirmar poltronas</button>
         <button class="btn-sec" style="margin-top:.5rem" onclick="go('buy')">Cancelar</button>
       </aside>
+    </div>
+  </div>
+</div>
+
+<!-- AGE VERIFICATION POPUP -->
+<div class="modal-ov" id="age-modal" onclick="closeAgeModal(event)">
+  <div class="modal age-modal-box" onclick="event.stopPropagation()">
+    <div class="m-handle"></div>
+    <div class="age-modal-icon" id="age-modal-icon">🔞</div>
+    <div class="m-title" id="age-modal-title">Verificação de Idade</div>
+    <div class="m-desc" id="age-modal-desc">Este filme possui classificação indicativa.</div>
+    <div class="age-form">
+      <div class="fg"><label>CPF</label><input class="finput" id="age-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" oninput="maskCPF(this)"></div>
+      <div class="fg"><label>Data de nascimento</label><input class="finput" id="age-dob" type="date" onchange="ageCheckLive()"></div>
+      <div class="age-result" id="age-result"></div>
+    </div>
+    <div class="m-actions">
+      <button class="mbtn mbtn-p" id="age-confirm-btn" onclick="confirmAge()" disabled>Confirmar</button>
+      <button class="mbtn mbtn-s" onclick="_doCloseAgeModal()">Cancelar</button>
     </div>
   </div>
 </div>
