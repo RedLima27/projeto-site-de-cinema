@@ -830,8 +830,9 @@ function doSnack() {
 }
 
 /* ── INIT ── */
-renderFilms();
-renderSoon();
-renderSnacks();
-createSeatChooser();
-document.addEventListener("DOMContentLoaded", () => { tickClock(); setInterval(tickClock, 1000); });
+try { renderFilms(); } catch(e) {}
+try { renderSoon(); } catch(e) {}
+try { renderSnacks(); } catch(e) {}
+try { createSeatChooser(); } catch(e) {}
+tickClock();
+setInterval(tickClock, 1000);
