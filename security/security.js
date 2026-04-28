@@ -107,12 +107,20 @@ let sessionTimeout;
 const SESSION_DURATION = 30 * 60 * 1000; // 30 minutos
 
 function resetSessionTimeout() {
-  clearTimeout(sessionTimeout);
-  sessionTimeout = setTimeout(() => {
-    clearSessionData();
-    alert('Sua sessão expirou. Faça login novamente.');
-    location.reload();
-  }, SESSION_DURATION);
+  try {
+    clearTimeout(sessionTimeout);
+    sessionTimeout = setTimeout(() => {
+      try {
+        clearSessionData();
+        // Use banner instead of alert() — alert() blocks setInterval/clock
+        const banner = document.createElement('div');
+        banner.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ef4444;color:#fff;text-align:center;padding:14px;font-weight:700;z-index:99999;font-size:14px';
+        banner.textContent = '⏱️ Sessão expirada. A página será recarregada em 3 segundos...';
+        document.body.appendChild(banner);
+        setTimeout(() => location.reload(), 3000);
+      } catch(e) { location.reload(); }
+    }, SESSION_DURATION);
+  } catch(e) {}
 }
 
 function clearSessionData() {
@@ -197,37 +205,45 @@ function addSecurityHeaders() {
  * Detecta tentativas de console injection
  */
 function detectConsoleInjection() {
-  const originalLog = console.log;
-  console.log = function(...args) {
-    if (args[0]?.includes?.('alert') || args[0]?.includes?.('eval')) {
-      logSecurityEvent('CONSOLE_INJECTION_ATTEMPT', 'WARNING', { args });
-    }
-    originalLog.apply(console, args);
-  };
+  try {
+    const originalLog = console.log;
+    console.log = function(...args) {
+      try {
+        if (args[0]?.includes?.('alert') || args[0]?.includes?.('eval')) {
+          logSecurityEvent('CONSOLE_INJECTION_ATTEMPT', 'WARNING', { args });
+        }
+      } catch(e) {}
+      originalLog.apply(console, args);
+    };
+  } catch(e) {}
 }
 
 /**
  * Detecta tentativas de local storage abuse
  */
 function monitorLocalStorage() {
-  const originalSetItem = Storage.prototype.setItem;
-  Storage.prototype.setItem = function(key, value) {
-    if (value.length > 1000000) { // > 1MB
-      logSecurityEvent('STORAGE_ABUSE_ATTEMPT', 'WARNING', { key, size: value.length });
-    }
-    originalSetItem.call(this, key, value);
-  };
+  try {
+    const originalSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function(key, value) {
+      try {
+        if (typeof value === 'string' && value.length > 1000000) {
+          logSecurityEvent('STORAGE_ABUSE_ATTEMPT', 'WARNING', { key, size: value.length });
+        }
+        originalSetItem.call(this, key, value);
+      } catch(e) { originalSetItem.call(this, key, value); }
+    };
+  } catch(e) {}
 }
 
 // ========== INICIALIZAÇÃO ==========
 function initSecurity() {
-  addSecurityHeaders();
-  detectConsoleInjection();
-  monitorLocalStorage();
-  generateCSRFToken();
-  resetSessionTimeout();
-  logSecurityEvent('SECURITY_MODULE_INITIALIZED', 'INFO');
+  try { addSecurityHeaders(); } catch(e) {}
+  try { detectConsoleInjection(); } catch(e) {}
+  try { monitorLocalStorage(); } catch(e) {}
+  try { generateCSRFToken(); } catch(e) {}
+  try { resetSessionTimeout(); } catch(e) {}
+  try { logSecurityEvent('SECURITY_MODULE_INITIALIZED', 'INFO'); } catch(e) {}
 }
 
-// Auto-inicializar quando o script carrega
-document.addEventListener('DOMContentLoaded', initSecurity);
+// Auto-inicializar — não bloqueia outros scripts em caso de erro
+try { document.addEventListener('DOMContentLoaded', initSecurity); } catch(e) {}
