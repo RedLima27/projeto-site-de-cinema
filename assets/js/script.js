@@ -166,25 +166,46 @@ function ageCheckLive() {
   const f = FILMS.find(x => x.id === _pendingFilmId);
   if (!f) return;
   const dob = document.getElementById('age-dob').value;
+  const cpf = document.getElementById('age-cpf').value.replace(/\D/g, '');
   const res = document.getElementById('age-result');
   const btn = document.getElementById('age-confirm-btn');
   if (!dob) { res.textContent = ''; btn.disabled = true; return; }
-  const age = calcAgeFromDOB(dob);
+
+  const ageByDOB = calcAgeFromDOB(dob);
+
+  // Cross-check: CPF age vs DOB age (only if CPF is fully filled)
+  if (cpf.length === 11) {
+    const ageByCPF = ageFromCPF(cpf);
+    // Allow ±2 years tolerance for CPF estimation
+    if (Math.abs(ageByCPF - ageByDOB) > 2) {
+      res.className = 'age-result err';
+      res.textContent = 'A data de nascimento não corresponde ao CPF informado. Verifique os dados.';
+      btn.disabled = true;
+      return;
+    }
+  }
+
   if (f.minAge === 0) {
     res.className = 'age-result ok';
-    res.textContent = 'Filme livre — entrada permitida para todas as idades.';
+    res.textContent = 'Filme livre — entrada permitida. Idade confirmada: ' + ageByDOB + ' anos.';
     btn.disabled = false;
-  } else if (age < 16) {
+  } else if (ageByDOB < 16) {
     res.className = 'age-result err';
-    res.textContent = 'Idade mínima para comprar ingressos é 16 anos (você tem ' + age + ' anos).';
+    res.textContent = 'Idade mínima para comprar ingressos é 16 anos (você tem ' + ageByDOB + ' anos).';
     btn.disabled = true;
-  } else if (age < f.minAge) {
+  } else if (ageByDOB < f.minAge) {
     res.className = 'age-result err';
-    res.textContent = 'Você tem ' + age + ' anos. Este filme exige ' + f.minAge + '+ anos. Compra bloqueada.';
+    res.textContent = 'Você tem ' + ageByDOB + ' anos. Este filme exige ' + f.minAge + '+ anos. Compra bloqueada.';
     btn.disabled = true;
   } else {
-    res.className = 'age-result ok';
-    res.textContent = 'Idade confirmada (' + age + ' anos). Compra autorizada.';
+    // Auto-detect meia-60 for confirmed 60+ year olds
+    if (ageByDOB >= 60) {
+      res.className = 'age-result ok';
+      res.textContent = 'Idade confirmada (' + ageByDOB + ' anos). Meia-entrada 60+ aplicada automaticamente!';
+    } else {
+      res.className = 'age-result ok';
+      res.textContent = 'Idade confirmada (' + ageByDOB + ' anos). Compra autorizada.';
+    }
     btn.disabled = false;
   }
 }
@@ -224,14 +245,32 @@ function confirmAge() {
       return;
     }
     if (cpf) document.getElementById('b-cpf').value = cpf;
+    _applyAutoMeia60(calcAgeFromDOB(dob));
     _doCloseAgeModal();
     if (_ageCallback) _ageCallback();
   })
   .catch(() => {
     if (cpf) document.getElementById('b-cpf').value = cpf;
+    _applyAutoMeia60(calcAgeFromDOB(dob));
     _doCloseAgeModal();
     if (_ageCallback) _ageCallback();
   });
+}
+
+function _applyAutoMeia60(age) {
+  if (age < 60) return;
+  // Auto-set all seats that are 'inteira' to 'meia-60' for 60+ users
+  let changed = false;
+  selectedSeats.forEach(s => {
+    if ((seatTypes[s] || 'inteira') === 'inteira') {
+      seatTypes[s] = 'meia-60';
+      changed = true;
+    }
+  });
+  if (changed) {
+    renderSeatTypes();
+    refreshEstimate();
+  }
 }
 
 /* ── CLOCK ── */
