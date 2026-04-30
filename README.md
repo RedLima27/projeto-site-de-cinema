@@ -1,46 +1,43 @@
-﻿# CineMax
+# 🐉 CineDragon
 
-Projeto web front-end de cinema com layout responsivo, compra de ingressos e bomboniere.
+Sistema de cinema com compra de ingressos, bomboniere e verificação de idade.
 
-## O que está pronto
-- Navegação entre seções: Em Cartaz, Em Breve, Ingressos e Bomboniere
-- Compra de ingresso com verificação de CPF e idade
-- Seleção de poltrona: Comum, VIP e IMAX
-- Carrinho de bomboniere com quantidade e total dinâmico
-- Modal de pagamento com PIX e cartão
-- Geração de códigos de ingresso e retirada
-- Integração básica com módulo de segurança em `security/security.js`
+## Modificações recentes
 
-## Estrutura do projeto
+### Interface
+- Modo claro/escuro com botão ☀️/🌙 na navegação — preferência salva entre sessões
+- Tema dinâmico por filme — hero muda de cor a cada 8 segundos conforme o filme em destaque
+- Relógio em tempo real corrigido
+- Botão Voltar corrigido — navega apenas uma página atrás, sem ciclar
+
+### Em Breve
+- Cards redesenhados com poster maior (160px)
+- Badge de classificação etária sobre o poster
+- Tema de cor por gênero ao clicar no filme
+
+### Ingressos
+- Mapa de poltronas integrado na própria página (sem abrir nova aba)
+- Seleção de múltiplas poltronas — até 12 por compra
+- Tipo de entrada por poltrona: Inteira, Meia-Estudante ou Meia-60+
+- Campo de RA individual por poltrona meia-estudante — ao menos um obrigatório no grupo
+- Meia-60+ aplicada automaticamente pela data de nascimento
+- Resumo da composição do pedido antes do pagamento
+
+### Verificação de idade
+- Popup obrigatório antes do pagamento para filmes com classificação
+- Filmes 18+ permitem compra a partir de 16 anos com aviso de responsabilidade
+- Validação apenas por data de nascimento — sem estimativa por CPF
+
+### Back-end
+- Filmes carregados do banco MySQL em tempo real e atualizados a cada 5 minutos
+- Para adicionar um filme basta inserir na tabela `films` — aparece no site automaticamente
+- CPF hasheado com SHA-256 antes de qualquer gravação (LGPD)
+
+## Como iniciar
+
+```bash
+cd backend
+npm start
 ```
-CineDragon/
-├── index.html
-├── assets/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── script.js
-├── security/
-│   ├── security.js
-│   ├── security-config.json
-│   ├── README.md
-│   └── PAYMENT.md
-├── ESTRUTURA.md
-├── README.md
-└── .gitignore
-```
 
-## Como usar
-1. Abra `index.html` no navegador.
-2. Navegue pelas abas e preencha os formulários.
-3. Finalize a compra com PIX ou cartão.
-
-## Observações
-- O projeto é apenas front-end.
-- O pagamento e o ingresso são simulados localmente.
-- A pasta `security/` contém o módulo e a documentação de proteção.
-
-## Publicação no GitHub
-- Confirme que `index.html` está na raiz.
-- Mantém os caminhos relativos de `assets/css/style.css` e `assets/js/script.js`.
-- Use a branch `main` ou `gh-pages` para GitHub Pages.
+Acesse `http://localhost:3000` — o servidor serve o front-end automaticamente.
